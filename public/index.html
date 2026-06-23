@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garage 365 — Controle de Veículos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TELA DE LOGIN -->
+  <div id="tela-login">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="header-icon">🚗</div>
+        <div>
+          <h1>Garage 365</h1>
+          <p>Estética Automotiva</p>
+        </div>
+      </div>
+      <input type="text" id="login-usuario" placeholder="Usuário" />
+      <input type="password" id="login-senha" placeholder="Senha" />
+      <p id="login-erro" style="color:#e05252; font-size:12px; display:none;"></p>
+      <button onclick="fazerLogin()">🔐 Entrar</button>
+    </div>
+  </div>
+
+  <!-- APP PRINCIPAL -->
+  <div id="app" style="display:none;">
+
+    <header>
+      <div class="header-icon">🚗</div>
+      <div class="header-texto">
+        <h1>Garage 365</h1>
+        <p>Estética Automotiva</p>
+      </div>
+      <button class="btn-logout" onclick="fazerLogout()">🚪 Sair</button>
+    </header>
+
+    <nav class="abas">
+      <button class="aba ativa" onclick="trocarAba('veiculos')">🚗 Veículos</button>
+      <button class="aba" onclick="trocarAba('faturamento')">💰 Faturamento</button>
+      <button class="aba" onclick="trocarAba('historico')">📜 Histórico</button>
+      <button class="aba" onclick="trocarAba('clientes')">👥 Clientes</button>
+    </nav>
+
+    <main>
+
+      <!-- ABA VEÍCULOS -->
+      <div id="aba-veiculos" style="display:flex; flex-direction:column; gap:20px;">
+        <section class="formulario">
+          <h2>Registrar Entrada</h2>
+          <input type="text" id="cliente" placeholder="Nome do cliente" />
+          <input type="text" id="telefone" placeholder="Telefone (ex: 41999998888)" onblur="buscarClientePorTelefone()" />
+          <p id="aviso-cliente" style="font-size:11px; color:#2a9d5c; margin:-6px 0 10px; display:none;"></p>
+          <input type="text" id="modelo" placeholder="Modelo do carro (ex: HB20)" />
+          <input type="text" id="placa" placeholder="Placa (ex: ABC-1234)" />
+          <select id="servico" onchange="preencherValor()">
+            <option value="">Selecione o serviço</option>
+            <option value="Lavagem Carro Pequeno" data-valor="55">Lavagem — Carro Pequeno (R$‌ 55)</option>
+            <option value="Lavagem Carro Grande" data-valor="65">Lavagem — Carro Grande (R$‌ 65)</option>
+            <option value="Lavagem + Cera Líquida Pequeno" data-valor="80">Lavagem + Cera Líquida — Pequeno (R$‌ 80)</option>
+            <option value="Lavagem + Cera Líquida Grande" data-valor="100">Lavagem + Cera Líquida — Grande (R$‌ 100)</option>
+            <option value="Lavagem + Cera Pasta Pequeno" data-valor="100">Lavagem + Cera Pasta — Pequeno (R$‌ 100)</option>
+            <option value="Lavagem + Cera Pasta Grande" data-valor="120">Lavagem + Cera Pasta — Grande (R$‌ 120)</option>
+          </select>
+          <input type="number" id="valor" placeholder="Valor (R$)" />
+          <select id="pagamento">
+            <option value="">Forma de pagamento</option>
+            <option value="Dinheiro">💵 Dinheiro</option>
+            <option value="Pix">📱 Pix</option>
+            <option value="Crédito">💳 Crédito</option>
+            <option value="Débito">💳 Débito</option>
+          </select>
+          <button onclick="registrarEntrada()">✅ Registrar Entrada</button>
+        </section>
+
+        <section class="lista">
+          <h2>Veículos na Estética</h2>
+          <div id="veiculos"></div>
+        </section>
+      </div>
+
+      <!-- ABA FATURAMENTO -->
+      <div id="aba-faturamento" style="display:none;"></div>
+
+      <!-- ABA HISTÓRICO -->
+      <div id="aba-historico" style="display:none;"></div>
+
+      <!-- ABA CLIENTES -->
+      <div id="aba-clientes" style="display:none;">
+        <section class="formulario">
+          <h2>Novo Cliente</h2>
+          <input type="text" id="novo-cliente-nome" placeholder="Nome do cliente" />
+          <input type="text" id="novo-cliente-telefone" placeholder="Telefone (ex: 41999998888)" />
+          <button onclick="cadastrarCliente()">✅ Cadastrar Cliente</button>
+        </section>
+        <section class="lista">
+          <h2>Clientes Cadastrados</h2>
+          <div id="lista-clientes"></div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

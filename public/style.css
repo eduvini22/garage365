@@ -1,0 +1,220 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #111111;
+  color: #fff;
+}
+
+header {
+  background: #1a1a1a;
+  border-bottom: 3px solid #E8621A;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  background: #E8621A;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.header-texto h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.header-texto p {
+  font-size: 11px;
+  color: #E8621A;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+main {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formulario, .lista {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-top: 3px solid #E8621A;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #E8621A;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+input, select {
+  width: 100%;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 3px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 13px;
+  margin-bottom: 10px;
+  outline: none;
+  appearance: none;
+}
+
+input::placeholder { color: #555; }
+input:focus, select:focus { border-color: #E8621A; }
+select option { background: #1a1a1a; }
+
+button {
+  background: #E8621A;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+button:hover { background: #cc5416; }
+
+.card {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card.fila     { border-left: 4px solid #E8621A; }
+.card.em-servico { border-left: 4px solid #3B8BD4; }
+.card.pronto   { border-left: 4px solid #2a9d5c; }
+
+.card-info p { margin: 3px 0; font-size: 12px; color: #888; }
+.card-info strong { font-size: 15px; color: #fff; }
+
+.status {
+  padding: 5px 14px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.status.fila {
+  background: #2a2200;
+  color: #E8621A;
+  border: 1px solid #E8621A44;
+}
+
+.status.em-servico {
+  background: #0a1e35;
+  color: #3B8BD4;
+  border: 1px solid #3B8BD444;
+}
+
+.status.pronto {
+  background: #0a2015;
+  color: #2a9d5c;
+  border: 1px solid #2a9d5c44;
+}
+
+.acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.acoes button {
+  width: auto;
+  padding: 7px 14px;
+  font-size: 11px;
+  background: #E8621A;
+}
+
+.acoes button.saida { background: #2a9d5c; }
+.acoes button.whatsapp { background: #128C7E; }
+.acoes button.whatsapp:hover { background: #0f7269; }
+
+/* ─── TELA DE LOGIN ─────────────────────────── */
+#tela-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #111;
+}
+
+.login-box {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-top: 3px solid #E8621A;
+  border-radius: 4px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.login-logo h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.login-logo p {
+  font-size: 11px;
+  color: #E8621A;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ─── BOTÃO LOGOUT ──────────────────────────── */
+.btn-logout {
+  margin-left: auto;
+  width: auto;
+  padding: 8px 16px;
+  font-size: 11px;
+  background: transparent;
+  border: 1px solid #E8621A44;
+  color: #E8621A;
+}
+
+.btn-logout:hover {
+  background: #E8621A22;
+}
