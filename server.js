@@ -5,9 +5,17 @@ const { verificarToken, gerarToken } = require('./auth');
 
 const app = express();
 
-// ─── Credenciais do dono (mude aqui) ───────────────────────────
-const USUARIO = process.env.LOGIN_USUARIO || 'garage365';
-const SENHA   = process.env.LOGIN_SENHA   || 'senha123';
+// ─── Credenciais do dono ───────────────────────────────────────
+// Nunca colocar valores reais aqui. Configure LOGIN_USUARIO e
+// LOGIN_SENHA nas variáveis de ambiente da Render (ou num .env
+// local que está no .gitignore). Sem isso, o servidor não inicia.
+const USUARIO = process.env.LOGIN_USUARIO;
+const SENHA   = process.env.LOGIN_SENHA;
+
+if (!USUARIO || !SENHA) {
+  console.error('Erro: configure LOGIN_USUARIO e LOGIN_SENHA nas variáveis de ambiente.');
+  process.exit(1);
+}
 // ───────────────────────────────────────────────────────────────
 
 app.use(cors());
