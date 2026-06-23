@@ -57,12 +57,12 @@
           <input type="text" id="placa" placeholder="Placa (ex: ABC-1234)" />
           <select id="servico" onchange="preencherValor()">
             <option value="">Selecione o serviço</option>
-            <option value="Lavagem Carro Pequeno" data-valor="55">Lavagem — Carro Pequeno (R$‌ 55)</option>
-            <option value="Lavagem Carro Grande" data-valor="65">Lavagem — Carro Grande (R$‌ 65)</option>
-            <option value="Lavagem + Cera Líquida Pequeno" data-valor="80">Lavagem + Cera Líquida — Pequeno (R$‌ 80)</option>
-            <option value="Lavagem + Cera Líquida Grande" data-valor="100">Lavagem + Cera Líquida — Grande (R$‌ 100)</option>
-            <option value="Lavagem + Cera Pasta Pequeno" data-valor="100">Lavagem + Cera Pasta — Pequeno (R$‌ 100)</option>
-            <option value="Lavagem + Cera Pasta Grande" data-valor="120">Lavagem + Cera Pasta — Grande (R$‌ 120)</option>
+            <option value="Lavagem Carro Pequeno" data-valor="55">Lavagem — Carro Pequeno (R$ 55)</option>
+            <option value="Lavagem Carro Grande" data-valor="65">Lavagem — Carro Grande (R$ 65)</option>
+            <option value="Lavagem + Cera Líquida Pequeno" data-valor="80">Lavagem + Cera Líquida — Pequeno (R$ 80)</option>
+            <option value="Lavagem + Cera Líquida Grande" data-valor="100">Lavagem + Cera Líquida — Grande (R$ 100)</option>
+            <option value="Lavagem + Cera Pasta Pequeno" data-valor="100">Lavagem + Cera Pasta — Pequeno (R$ 100)</option>
+            <option value="Lavagem + Cera Pasta Grande" data-valor="120">Lavagem + Cera Pasta — Grande (R$ 120)</option>
           </select>
           <input type="number" id="valor" placeholder="Valor (R$)" />
           <select id="pagamento">
@@ -76,16 +76,47 @@
         </section>
 
         <section class="lista">
-          <h2>Veículos na Estética</h2>
+          <div class="lista-header">
+            <h2>Veículos na Estética</h2>
+            <div class="filtro-data">
+              <input type="date" id="filtro-data" onchange="carregarVeiculos()" />
+              <button class="btn-hoje" onclick="filtrarHoje()">Hoje</button>
+              <button class="btn-todos" onclick="filtrarTodos()">Todos</button>
+            </div>
+          </div>
           <div id="veiculos"></div>
         </section>
       </div>
 
       <!-- ABA FATURAMENTO -->
-      <div id="aba-faturamento" style="display:none;"></div>
+      <div id="aba-faturamento" style="display:none;">
+        <section class="formulario">
+          <div class="lista-header">
+            <h2>Faturamento</h2>
+            <div class="filtro-data">
+              <input type="date" id="filtro-fat" onchange="carregarFaturamento()" />
+              <button class="btn-hoje" onclick="filtrarHojeFat()">Hoje</button>
+              <button class="btn-todos" onclick="filtrarTodosFat()">Todos</button>
+            </div>
+          </div>
+          <div id="metricas" class="metricas"></div>
+          <div id="fat-detalhes"></div>
+        </section>
+      </div>
 
       <!-- ABA HISTÓRICO -->
-      <div id="aba-historico" style="display:none;"></div>
+      <div id="aba-historico" style="display:none;">
+        <section class="formulario">
+          <h2>Buscar Histórico</h2>
+          <input type="text" id="busca-historico" placeholder="Digite o nome do cliente ou a placa..." oninput="buscarHistorico()" />
+        </section>
+        <section class="lista">
+          <h2>Resultados</h2>
+          <div id="resultados-historico">
+            <p style="color:#555; font-size:13px;">Digite algo no campo acima para buscar.</p>
+          </div>
+        </section>
+      </div>
 
       <!-- ABA CLIENTES -->
       <div id="aba-clientes" style="display:none;">
@@ -102,6 +133,40 @@
       </div>
 
     </main>
+
+    <!-- MODAL DE EDIÇÃO -->
+    <div id="modal-overlay" class="modal-overlay" style="display:none;">
+      <div class="modal">
+        <h2>✏️ Editar Veículo</h2>
+        <input type="hidden" id="edit-id" />
+        <input type="text" id="edit-cliente" placeholder="Nome do cliente" />
+        <input type="text" id="edit-telefone" placeholder="Telefone" />
+        <input type="text" id="edit-modelo" placeholder="Modelo do carro" />
+        <input type="text" id="edit-placa" placeholder="Placa" />
+        <select id="edit-servico">
+          <option value="">Selecione o serviço</option>
+          <option value="Lavagem Carro Pequeno">Lavagem — Carro Pequeno (R$ 55)</option>
+          <option value="Lavagem Carro Grande">Lavagem — Carro Grande (R$ 65)</option>
+          <option value="Lavagem + Cera Líquida Pequeno">Lavagem + Cera Líquida — Pequeno (R$ 80)</option>
+          <option value="Lavagem + Cera Líquida Grande">Lavagem + Cera Líquida — Grande (R$ 100)</option>
+          <option value="Lavagem + Cera Pasta Pequeno">Lavagem + Cera Pasta — Pequeno (R$ 100)</option>
+          <option value="Lavagem + Cera Pasta Grande">Lavagem + Cera Pasta — Grande (R$ 120)</option>
+        </select>
+        <input type="number" id="edit-valor" placeholder="Valor (R$)" />
+        <select id="edit-pagamento">
+          <option value="">Forma de pagamento</option>
+          <option value="Dinheiro">💵 Dinheiro</option>
+          <option value="Pix">📱 Pix</option>
+          <option value="Crédito">💳 Crédito</option>
+          <option value="Débito">💳 Débito</option>
+        </select>
+        <div class="modal-acoes">
+          <button onclick="salvarEdicao()">💾 Salvar</button>
+          <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script src="app.js"></script>

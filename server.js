@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./database');
-const jwt = require('jsonwebtoken');
-const { verificarToken, SECRET } = require('./auth');
+const { verificarToken, gerarToken } = require('./auth');
 
 const app = express();
 
@@ -19,7 +18,7 @@ app.use(express.static('public'));
 app.post('/login', (req, res) => {
   const { usuario, senha } = req.body;
   if (usuario === USUARIO && senha === SENHA) {
-    const token = jwt.sign({ usuario }, SECRET, { expiresIn: '12h' });
+    const token = gerarToken(usuario);
     return res.json({ token });
   }
   res.status(401).json({ erro: 'Usuário ou senha incorretos' });
@@ -95,7 +94,7 @@ app.get('/veiculos', verificarToken, (req, res) => {
   res.json(veiculos);
 });
 
-// Registrar entrada — agora também vincula/cria o cliente automaticamente
+// Registrar entrada — também vincula/cria o cliente automaticamente
 app.post('/veiculos', verificarToken, (req, res) => {
   const { cliente, telefone, modelo, placa, servico, valor, pagamento } = req.body;
 
@@ -145,6 +144,7 @@ app.delete('/veiculos/:id', verificarToken, (req, res) => {
 });
 
 // Buscar histórico por cliente ou placa
+// ESSA ROTA ESTAVA FALTANDO — sem ela a aba Histórico não funciona
 app.get('/historico', verificarToken, (req, res) => {
   const { busca } = req.query;
   if (!busca) return res.json([]);
