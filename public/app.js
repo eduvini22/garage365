@@ -406,6 +406,12 @@ async function cadastrarCliente() {
   carregarClientes();
 }
 
+async function excluirCliente(id) {
+  if (!confirm('Tem certeza que deseja excluir este cliente? O histórico de carros dele será mantido.')) return;
+  await fetchAuth(`${API}/clientes/${id}`, { method: 'DELETE' });
+  carregarClientes();
+}
+
 async function carregarClientes() {
   const res = await fetchAuth(`${API}/clientes`);
   if (!res) return;
@@ -430,6 +436,9 @@ async function carregarClientes() {
           <p>🔁 ${c.visitas} visita(s) ${fiel ? '| Cliente fiel' : ''}</p>
           <p>💰 Total gasto: R$ ${c.totalGasto.toFixed(2)}</p>
           <p>🕐 ${ultimaVisitaTexto}</p>
+        </div>
+        <div class="acoes">
+          <button class="excluir" onclick="excluirCliente(${c.id})">🗑 Excluir</button>
         </div>
       </div>
     `;

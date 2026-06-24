@@ -86,6 +86,14 @@ app.post('/clientes', verificarToken, (req, res) => {
   }
 });
 
+// Excluir cliente — mantém os veículos/histórico dele intactos,
+// apenas desfaz o vínculo (cliente_id passa a null nos veículos antigos)
+app.delete('/clientes/:id', verificarToken, (req, res) => {
+  db.prepare('UPDATE veiculos SET cliente_id = NULL WHERE cliente_id = ?').run(req.params.id);
+  db.prepare('DELETE FROM clientes WHERE id = ?').run(req.params.id);
+  res.json({ mensagem: 'Cliente removido!' });
+});
+
 // Listar veículos (com filtro opcional por data)
 app.get('/veiculos', verificarToken, (req, res) => {
   const { data } = req.query;
