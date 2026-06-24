@@ -138,7 +138,7 @@ app.patch('/veiculos/:id/status', verificarToken, (req, res) => {
 // Registrar saída
 app.patch('/veiculos/:id/saida', verificarToken, (req, res) => {
   db.prepare(
-    "UPDATE veiculos SET saida = datetime('now','localtime'), status = 'pronto' WHERE id = ?"
+    "UPDATE veiculos SET saida = datetime('now','-3 hours'), status = 'pronto' WHERE id = ?"
   ).run(req.params.id);
   const veiculo = db.prepare('SELECT * FROM veiculos WHERE id = ?').get(req.params.id);
   res.json(veiculo);
