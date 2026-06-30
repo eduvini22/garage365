@@ -44,3 +44,13 @@ inicializarTabelas().catch(err => {
 });
 
 module.exports = pool;
+
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS clientes (
+    id SERIAL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    telefone TEXT NOT NULL UNIQUE,
+    observacao TEXT,
+    criado_em TIMESTAMP DEFAULT (NOW() - INTERVAL '3 hours')
+  )
+`);

@@ -419,11 +419,13 @@ async function buscarClientePorTelefone() {
 async function cadastrarCliente() {
   const nome = document.getElementById('novo-cliente-nome').value;
   const telefone = document.getElementById('novo-cliente-telefone').value;
+  const observacao = document.getElementById('novo-cliente-observacao').value;
+
   if (!nome || !telefone) { alert('Preencha nome e telefone!'); return; }
 
   const res = await fetchAuth(`${API}/clientes`, {
     method: 'POST',
-    body: JSON.stringify({ nome, telefone })
+    body: JSON.stringify({ nome, telefone, observacao })
   });
   if (!res) return;
   const data = await res.json();
@@ -431,6 +433,7 @@ async function cadastrarCliente() {
 
   document.getElementById('novo-cliente-nome').value = '';
   document.getElementById('novo-cliente-telefone').value = '';
+  document.getElementById('novo-cliente-observacao').value = '';
   carregarClientes();
 }
 
@@ -453,8 +456,9 @@ async function carregarClientes() {
 
   div.innerHTML = clientes.map(c => {
     const fiel = c.visitas >= 5;
-    const ultimaVisitaTexto = c.ultimaVisita
-      ? `Última visita: ${c.ultimaVisita.split(' ')[0]}`
+    const totalGasto = Number(c.totalGasto ?? c.totalgasto ?? 0);
+    const ultimaVisitaTexto = c.ultimaVisita || c.ultimavisita
+      ? `Última visita: ${(c.ultimaVisita || c.ultimavisita).split(' ')[0]}`
       : 'Ainda não trouxe veículo';
     return `
       <div class="card">
@@ -462,13 +466,25 @@ async function carregarClientes() {
           <strong>${c.nome} ${fiel ? '⭐' : ''}</strong>
           <p>📞 ${c.telefone}</p>
           <p>🔁 ${c.visitas} visita(s) ${fiel ? '| Cliente fiel' : ''}</p>
-          <p>💰 Total gasto: R$ ${c.totalGasto.toFixed(2)}</p>
+          <p>💰 Total gasto: R$ ${totalGasto.toFixed(2)}</p>
           <p>🕐 ${ultimaVisitaTexto}</p>
+          ${c.observacao ? `<p style="color:#E8621A; font-size:12px; margin-top:4px;">📝 ${c.observacao}</p>` : ''}
         </div>
         <div class="acoes">
+          <button class="editar" onclick="editarObservacao(${c.id}, '${(c.observacao || '').replace(/'/g, "\\'")}')">📝 Obs.</button>
           <button class="excluir" onclick="excluirCliente(${c.id})">🗑 Excluir</button>
         </div>
       </div>
     `;
   }).join('');
+}
+
+async function editarObservacao(id, observacaoAtual) {
+  const nova = prompt('Editar observação do cliente:', observacaoAtual);
+  if (nova === null) return;
+  await fetchAuth(`${API}/clientes/${id}/observacao`, {
+    method: 'PATCH',
+    body: JSON.stringify({ observacao: nova })
+  });
+  carregarClientes();
 }

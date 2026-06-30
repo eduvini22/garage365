@@ -95,12 +95,12 @@ app.get('/clientes', verificarToken, async (req, res) => {
 // Cadastrar cliente novo
 app.post('/clientes', verificarToken, async (req, res) => {
   try {
-    const { nome, telefone } = req.body;
+    const { nome, telefone, observacao } = req.body;
     const { rows } = await pool.query(
-      'INSERT INTO clientes (nome, telefone) VALUES ($1, $2) RETURNING id',
-      [nome, telefone]
+      'INSERT INTO clientes (nome, telefone, observacao) VALUES ($1, $2, $3) RETURNING id',
+      [nome, telefone, observacao || null]
     );
-    res.json({ id: rows[0].id, nome, telefone });
+    res.json({ id: rows[0].id, nome, telefone, observacao });
   } catch (err) {
     if (err.code === '23505') {
       return res.status(400).json({ erro: 'Telefone já cadastrado para outro cliente.' });
@@ -120,6 +120,21 @@ app.delete('/clientes/:id', verificarToken, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: 'Erro ao excluir cliente.' });
+  }
+});
+
+// Atualizar observação do cliente
+app.patch('/clientes/:id/observacao', verificarToken, async (req, res) => {
+  try {
+    const { observacao } = req.body;
+    await pool.query(
+      'UPDATE clientes SET observacao = $1 WHERE id = $2',
+      [observacao || null, req.params.id]
+    );
+    res.json({ mensagem: 'Observação atualizada!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao atualizar observação.' });
   }
 });
 
@@ -211,7 +226,7 @@ app.put('/veiculos/:id', verificarToken, async (req, res) => {
     res.json({ mensagem: 'Veículo atualizado!' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ erro: 'Erro ao editar veículo.' });
+    res.status(500).json({ erro: 'Erro ao  editar veículo.' });
   }
 });
 
