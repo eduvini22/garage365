@@ -255,6 +255,43 @@ button:hover { background: #cc5416; }
 .fat-linha.total .fat-valor { color: #2a9d5c; font-size: 16px; }
 .fat-divider { height: 1px; background: #2a2a2a; margin: 8px 0; }
 
+/* SERVIÇOS ADICIONAIS */
+.adicionais {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.adicionais-titulo {
+  font-size: 11px;
+  font-weight: 700;
+  color: #E8621A;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.checkbox-linha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.checkbox-linha input[type="checkbox"] {
+  width: auto;
+  margin-bottom: 0;
+  accent-color: #E8621A;
+  cursor: pointer;
+}
+
+.checkbox-linha:hover { color: #fff; }
+
 /* MODAL DE EDIÇÃO */
 .modal-overlay {
   position: fixed;

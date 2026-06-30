@@ -97,8 +97,31 @@ document.addEventListener('DOMContentLoaded', () => {
 function preencherValor() {
   const select = document.getElementById('servico');
   const opcao = select.options[select.selectedIndex];
-  const valor = opcao.getAttribute('data-valor');
-  if (valor) document.getElementById('valor').value = valor;
+  const valorPrincipal = parseFloat(opcao.getAttribute('data-valor')) || 0;
+
+  const adicionaisMarcados = document.querySelectorAll('.adicional:checked');
+  let valorAdicionais = 0;
+  adicionaisMarcados.forEach(c => {
+    valorAdicionais += parseFloat(c.getAttribute('data-valor')) || 0;
+  });
+
+  const total = valorPrincipal + valorAdicionais;
+  document.getElementById('valor').value = total > 0 ? total : '';
+}
+
+// Monta o texto final do serviço juntando o principal com os adicionais marcados
+function montarTextoServico() {
+  const select = document.getElementById('servico');
+  const principal = select.value;
+  const adicionaisMarcados = Array.from(document.querySelectorAll('.adicional:checked'))
+    .map(c => c.value);
+
+  if (adicionaisMarcados.length === 0) return principal;
+  return principal + (principal ? ' + ' : '') + adicionaisMarcados.join(' + ');
+}
+
+function limparAdicionais() {
+  document.querySelectorAll('.adicional:checked').forEach(c => c.checked = false);
 }
 
 function abrirWhatsApp(telefone) {
@@ -109,7 +132,11 @@ function abrirWhatsApp(telefone) {
 }
 
 function dataHoje() {
-  return new Date().toISOString().split('T')[0];
+  const agora = new Date();
+  const ano = agora.getFullYear();
+  const mes = String(agora.getMonth() + 1).padStart(2, '0');
+  const dia = String(agora.getDate()).padStart(2, '0');
+  return `${ano}-${mes}-${dia}`;
 }
 
 // ─── ABAS ─────────────────────────────────────────────────────
@@ -192,7 +219,7 @@ async function registrarEntrada() {
   const telefone = document.getElementById('telefone').value;
   const modelo = document.getElementById('modelo').value;
   const placa = document.getElementById('placa').value;
-  const servico = document.getElementById('servico').value;
+  const servico = montarTextoServico();
   const valor = document.getElementById('valor').value;
   const pagamento = document.getElementById('pagamento').value;
 
@@ -212,6 +239,7 @@ async function registrarEntrada() {
   document.getElementById('servico').value = '';
   document.getElementById('pagamento').value = '';
   document.getElementById('aviso-cliente').style.display = 'none';
+  limparAdicionais();
 
   carregarVeiculos();
 }
