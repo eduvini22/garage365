@@ -255,7 +255,7 @@ button:hover { background: #cc5416; }
 .fat-linha.total .fat-valor { color: #2a9d5c; font-size: 16px; }
 .fat-divider { height: 1px; background: #2a2a2a; margin: 8px 0; }
 
-/* SERVIÇOS ADICIONAIS */
+/* SERVIÇOS ADICIONAIS — BOTÕES TOGGLE */
 .adicionais {
   background: #111;
   border: 1px solid #2a2a2a;
@@ -273,24 +273,56 @@ button:hover { background: #cc5416; }
   margin-bottom: 10px;
 }
 
-.checkbox-linha {
-  display: flex;
-  align-items: center;
+.toggles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 8px;
-  padding: 6px 0;
-  cursor: pointer;
+}
+
+.toggle-btn {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #888;
+  padding: 10px 8px;
   font-size: 12px;
-  color: #ccc;
-}
-
-.checkbox-linha input[type="checkbox"] {
-  width: auto;
-  margin-bottom: 0;
-  accent-color: #E8621A;
+  font-weight: 600;
+  text-align: center;
   cursor: pointer;
+  width: 100%;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.4;
+  transition: all 0.15s;
 }
 
-.checkbox-linha:hover { color: #fff; }
+.toggle-btn span {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #666;
+  margin-top: 4px;
+}
+
+.toggle-btn:hover {
+  border-color: #E8621A;
+  color: #fff;
+  background: #1a1a1a;
+}
+
+.toggle-btn.ativo {
+  background: #E8621A;
+  border-color: #E8621A;
+  color: #fff;
+}
+
+.toggle-btn.ativo span {
+  color: #fff;
+}
+
+.toggle-btn.ativo:hover {
+  background: #cc5416;
+}
 
 /* MODAL DE EDIÇÃO */
 .modal-overlay {

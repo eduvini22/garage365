@@ -57,6 +57,12 @@
           <input type="text" id="placa" placeholder="Placa (ex: ABC-1234)" />
           <select id="servico" onchange="preencherValor()">
             <option value="">Selecione o serviço principal</option>
+            <option value="Lavagem Carro Pequeno" data-valor="55">Lavagem — Carro Pequeno (R$ 55)</option>
+            <option value="Lavagem Carro Grande" data-valor="65">Lavagem — Carro Grande (R$ 65)</option>
+            <option value="Lavagem + Cera Líquida Pequeno" data-valor="80">Lavagem + Cera Líquida — Pequeno (R$ 80)</option>
+            <option value="Lavagem + Cera Líquida Grande" data-valor="100">Lavagem + Cera Líquida — Grande (R$ 100)</option>
+            <option value="Lavagem + Cera Pasta Pequeno" data-valor="100">Lavagem + Cera Pasta — Pequeno (R$ 100)</option>
+            <option value="Lavagem + Cera Pasta Grande" data-valor="120">Lavagem + Cera Pasta — Grande (R$ 120)</option>
             <option value="Lavagem Completa Hatch/Sedan" data-valor="55">Lavagem Completa — Hatch/Sedan (R$ 55)</option>
             <option value="Lavagem Completa SUV/Picape" data-valor="65">Lavagem Completa — SUV/Picape (R$ 65)</option>
             <option value="Lavagem Completa + Cera Líquida Hatch/Sedan" data-valor="80">Lavagem Completa + Cera Líquida — Hatch/Sedan (R$ 80)</option>
@@ -71,37 +77,15 @@
 
           <div class="adicionais">
             <p class="adicionais-titulo">+ Serviços adicionais (opcional)</p>
-
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Cristalização Para-brisa" data-valor="35" onchange="preencherValor()" />
-              <span>✨ Cristalização — Apenas Para-brisa (R$ 35)</span>
-            </label>
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Cristalização Todos os Vidros" data-valor="150" onchange="preencherValor()" />
-              <span>✨ Cristalização — Todos os Vidros (R$ 150)</span>
-            </label>
-
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Proteção de Plásticos Interno+Externo" data-valor="40" onchange="preencherValor()" />
-              <span>🧪 Proteção de Plásticos — Interno + Externo (R$ 40)</span>
-            </label>
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Proteção de Plásticos Apenas Interno" data-valor="20" onchange="preencherValor()" />
-              <span>🧪 Proteção de Plásticos — Apenas Interno (R$ 20)</span>
-            </label>
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Proteção de Plásticos Apenas Externo" data-valor="20" onchange="preencherValor()" />
-              <span>🧪 Proteção de Plásticos — Apenas Externo (R$ 20)</span>
-            </label>
-
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Higienização de Bancos (Tecido)" data-valor="280" onchange="preencherValor()" />
-              <span>🧼 Higienização de Bancos — Tecido (R$ 280)</span>
-            </label>
-            <label class="checkbox-linha">
-              <input type="checkbox" class="adicional" value="Limpeza + Hidratação de Bancos de Couro" data-valor="250" onchange="preencherValor()" />
-              <span>🧼 Limpeza + Hidratação de Bancos de Couro (R$ 250)</span>
-            </label>
+            <div class="toggles-grid">
+              <button type="button" class="toggle-btn" data-valor="35" data-servico="Cristalização Para-brisa" onclick="toggleAdicional(this)">✨ Cristalização Para-brisa<br><span>R$ 35</span></button>
+              <button type="button" class="toggle-btn" data-valor="150" data-servico="Cristalização Todos os Vidros" onclick="toggleAdicional(this)">✨ Cristalização Vidros<br><span>R$ 150</span></button>
+              <button type="button" class="toggle-btn" data-valor="40" data-servico="Proteção de Plásticos Interno+Externo" onclick="toggleAdicional(this)">🧪 Plásticos Int+Ext<br><span>R$ 40</span></button>
+              <button type="button" class="toggle-btn" data-valor="20" data-servico="Proteção de Plásticos Apenas Interno" onclick="toggleAdicional(this)">🧪 Plásticos Interno<br><span>R$ 20</span></button>
+              <button type="button" class="toggle-btn" data-valor="20" data-servico="Proteção de Plásticos Apenas Externo" onclick="toggleAdicional(this)">🧪 Plásticos Externo<br><span>R$ 20</span></button>
+              <button type="button" class="toggle-btn" data-valor="280" data-servico="Higienização de Bancos (Tecido)" onclick="toggleAdicional(this)">🧼 Higienização Tecido<br><span>R$ 280</span></button>
+              <button type="button" class="toggle-btn" data-valor="250" data-servico="Limpeza + Hidratação de Bancos de Couro" onclick="toggleAdicional(this)">🧼 Hidratação Couro<br><span>R$ 250</span></button>
+            </div>
           </div>
 
           <input type="number" id="valor" placeholder="Valor (R$)" />
@@ -164,11 +148,6 @@
           <h2>Novo Cliente</h2>
           <input type="text" id="novo-cliente-nome" placeholder="Nome do cliente" />
           <input type="text" id="novo-cliente-telefone" placeholder="Telefone (ex: 41999998888)" />
-          <textarea id="novo-cliente-observacao"
-            placeholder="Observação (opcional) — ex: Mensalista, MP, OAB..."
-            rows="2"
-            style="width:100%; background:#111; border:1px solid #333; border-radius:3px; padding:10px 12px; color:#fff; font-size:13px; margin-bottom:10px; outline:none; resize:vertical; font-family:Arial,sans-serif;">
-          </textarea>
           <button onclick="cadastrarCliente()">✅ Cadastrar Cliente</button>
         </section>
         <section class="lista">
@@ -190,6 +169,12 @@
         <input type="text" id="edit-placa" placeholder="Placa" />
         <select id="edit-servico">
           <option value="">Selecione o serviço</option>
+          <option value="Lavagem Carro Pequeno">Lavagem — Carro Pequeno (R$ 55)</option>
+          <option value="Lavagem Carro Grande">Lavagem — Carro Grande (R$ 65)</option>
+          <option value="Lavagem + Cera Líquida Pequeno">Lavagem + Cera Líquida — Pequeno (R$ 80)</option>
+          <option value="Lavagem + Cera Líquida Grande">Lavagem + Cera Líquida — Grande (R$ 100)</option>
+          <option value="Lavagem + Cera Pasta Pequeno">Lavagem + Cera Pasta — Pequeno (R$ 100)</option>
+          <option value="Lavagem + Cera Pasta Grande">Lavagem + Cera Pasta — Grande (R$ 120)</option>
           <option value="Lavagem Completa Hatch/Sedan">Lavagem Completa — Hatch/Sedan (R$ 55)</option>
           <option value="Lavagem Completa SUV/Picape">Lavagem Completa — SUV/Picape (R$ 65)</option>
           <option value="Lavagem Completa + Cera Líquida Hatch/Sedan">Lavagem Completa + Cera Líquida — Hatch/Sedan (R$ 80)</option>
