@@ -1,57 +1,73 @@
-const fs = require('fs');
-const path = require('path');
+const { Pool } = require('pg');
 const { Resend } = require('resend');
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const EMAIL_DESTINO = process.env.EMAIL_BACKUP;
-
-const CAMINHO_BANCO = path.join(__dirname, 'garage365.db');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 async function enviarBackup() {
   console.log('Iniciando backup do banco de dados...');
 
-  if (!RESEND_API_KEY) {
-    console.error('Erro: variável RESEND_API_KEY não configurada.');
+  if (!process.env.RESEND_API_KEY) {
+    console.error('Erro: RESEND_API_KEY não configurada.');
     process.exit(1);
   }
 
-  if (!EMAIL_DESTINO) {
-    console.error('Erro: variável EMAIL_BACKUP não configurada.');
+  if (!process.env.EMAIL_BACKUP) {
+    console.error('Erro: EMAIL_BACKUP não configurada.');
     process.exit(1);
   }
-
-  if (!fs.existsSync(CAMINHO_BANCO)) {
-    console.error('Erro: arquivo garage365.db não encontrado.');
-    process.exit(1);
-  }
-
-  const resend = new Resend(RESEND_API_KEY);
-  const conteudoBanco = fs.readFileSync(CAMINHO_BANCO);
-  const dataHoje = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
 
   try {
+    const { rows: clientes } = await pool.query(
+      'SELECT * FROM clientes ORDER BY id ASC'
+    );
+    const { rows: veiculos } = await pool.query(
+      'SELECT * FROM veiculos ORDER BY id ASC'
+    );
+
+    const dados = {
+      geradoEm: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+      totalClientes: clientes.length,
+      totalVeiculos: veiculos.length,
+      clientes,
+      veiculos
+    };
+
+    const conteudo = JSON.stringify(dados, null, 2);
+    const dataHoje = new Date()
+      .toLocaleDateString('pt-BR')
+      .replace(/\//g, '-');
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
     await resend.emails.send({
       from: 'Garage 365 Backup <onboarding@resend.dev>',
-      to: EMAIL_DESTINO,
+      to: process.env.EMAIL_BACKUP,
       subject: `Backup Garage 365 — ${dataHoje}`,
       html: `
-        <p>Backup automático do sistema Garage 365.</p>
-        <p>Data: ${dataHoje}</p>
-        <p>Arquivo anexado: garage365.db</p>
-        <p>Guarde este e-mail — ele contém todos os dados de clientes e veículos até esta data.</p>
+        <h2>Backup automático — Garage 365</h2>
+        <p><strong>Data:</strong> ${dataHoje}</p>
+        <p><strong>Clientes cadastrados:</strong> ${clientes.length}</p>
+        <p><strong>Atendimentos registrados:</strong> ${veiculos.length}</p>
+        <p>O arquivo JSON com todos os dados está anexado a este e-mail.</p>
+        <p style="color:#888; font-size:12px;">Este backup é gerado automaticamente todo dia às 3h da manhã.</p>
       `,
       attachments: [
         {
-          filename: `garage365-backup-${dataHoje}.db`,
-          content: conteudoBanco.toString('base64')
+          filename: `garage365-backup-${dataHoje}.json`,
+          content: Buffer.from(conteudo).toString('base64')
         }
       ]
     });
 
-    console.log('Backup enviado com sucesso para', EMAIL_DESTINO);
-  } catch (erro) {
-    console.error('Erro ao enviar backup:', erro);
+    console.log(`Backup enviado com sucesso! ${clientes.length} clientes, ${veiculos.length} veículos.`);
+  } catch (err) {
+    console.error('Erro ao gerar backup:', err.message);
     process.exit(1);
+  } finally {
+    await pool.end();
   }
 }
 
